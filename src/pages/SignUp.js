@@ -1,8 +1,85 @@
-import React from 'react'
+// import React from 'react'
+import React, { useState } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
+import {ReactComponent as ArrowRightIcon} from '../assets/svg/keyboardArrowRightIcon.svg'
+import visibilityIcon from '../assets/svg/visibilityIcon.svg'
 
 function SignUp() {
+  
+  const [showPassword,setShowPassword] =useState(false);
+  const [formData, setFormData]=useState({
+    name:"",
+    email:"",
+    password:"",
+  });
+
+  const {name, email,password}= formData;
+  const navigate= useNavigate();
+
+
+  const onChangeHamdler=function(e){
+    setFormData((prevState)=>({
+      ... prevState,
+      [e.target.id]:e.target.value,
+    }))
+  }
+
   return (
-    <div>SignUp</div>
+    <>
+    <div className='pageContainer'>
+      <header>
+        <p className='pageHeader'>
+          Welcome Back!!!
+        </p>
+      </header>
+      <form>
+      <input 
+          type='text' 
+          className='nameInput' 
+          placeholder='Name' 
+          id='name'
+          value={name}
+          onChange={onChangeHamdler}
+         />
+        <input 
+          type='email' 
+          className='emailInput' 
+          placeholder='Email' 
+          id='email'
+          value={email}
+          onChange={onChangeHamdler}
+         />
+        <div className='passwordInputDiv'>
+          <input 
+            type={showPassword?'text':'password'}
+            className='passwordInput'
+            placeholder='Password'
+            id='password'
+            value={password}
+            onChange={onChangeHamdler}
+          />
+          <img src={visibilityIcon} alt='show password' className='showPassword'
+            onClick={()=>{setShowPassword((prevState)=>!prevState)}} />
+        </div>
+
+        <Link to='/forgetpassword' className='forgotPasswordLink'>Forget Password</Link>
+        <div className='signUpBar'>
+          <p className='signUpText'>
+            Sign up
+          </p>
+          <button className='signInButton'>
+            <ArrowRightIcon fill='#ffffff' width='34px' height='34px' />
+          </button>
+        </div>
+      </form>
+
+      {/* google oAUTH vomponenet */}
+      <Link to='/sign-in' className='registerLink'>
+        Sign In Instead
+      </Link>
+
+    </div>
+    </>
   )
 }
 
