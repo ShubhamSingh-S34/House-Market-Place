@@ -1,7 +1,10 @@
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import {ReactComponent as ArrowRightIcon} from '../assets/svg/keyboardArrowRightIcon.svg'
 import visibilityIcon from '../assets/svg/visibilityIcon.svg'
+
+
 
 function SignIn() {
 
@@ -20,6 +23,24 @@ function SignIn() {
     }))
   }
 
+
+  const onSubmitHandler=async(e)=>{
+    e.preventDefault();
+    const auth=getAuth();
+    try{
+      const userCred=await signInWithEmailAndPassword(auth,formData.email,formData.password);
+      // console.log(userCred);
+      const user=auth.currentUser;
+      // console.log(user);
+      if(user){
+        navigate('/profile');
+      }
+    }
+    catch(err){
+      console.error(err.message);
+    }
+  }
+
   return (
     <>
     <div className='pageContainer'>
@@ -28,7 +49,7 @@ function SignIn() {
           Welcome Back!!!
         </p>
       </header>
-      <form>
+      <form onSubmit={onSubmitHandler}>
         <input 
           type='email' 
           className='emailInput' 

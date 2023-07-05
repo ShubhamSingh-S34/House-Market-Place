@@ -3,6 +3,9 @@ import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import {ReactComponent as ArrowRightIcon} from '../assets/svg/keyboardArrowRightIcon.svg'
 import visibilityIcon from '../assets/svg/visibilityIcon.svg'
+import {getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import {db} from '../firebase.config'
+import { getDoc, doc, serverTimestamp } from 'firebase/firestore'
 
 function SignUp() {
   
@@ -23,7 +26,30 @@ function SignUp() {
       [e.target.id]:e.target.value,
     }))
   }
+  const onSubmitHandler=async(e)=>{
+    e.preventDefault();
+    try{
+      const auth=getAuth();
+      const userCred=await createUserWithEmailAndPassword(auth,email,password)
+      .then(console.log('User created!!!'));
+      const user=userCred.user;
 
+      // console.log(user);
+      const formDataCopy={...formData};
+      // delete formDataCopy.password;
+      await getDoc(doc(db,'users',user.uid),formDataCopy)
+      .then(console.log("User added to the user database!!!"))
+      // .catch((err)=>{console.log('ERROR IN CREATING USER...', err)}); 
+
+      updateProfile(auth.currentUser,{
+        displayName:name,
+      })
+      navigate('/offers'); 
+    }
+    catch(e){
+      console.log(e);
+    }
+  }
   return (
     <>
     <div className='pageContainer'>
@@ -32,7 +58,7 @@ function SignUp() {
           Welcome Back!!!
         </p>
       </header>
-      <form>
+      <form onSubmit={onSubmitHandler}>
       <input 
           type='text' 
           className='nameInput' 
