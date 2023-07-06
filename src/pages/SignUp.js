@@ -6,6 +6,9 @@ import visibilityIcon from '../assets/svg/visibilityIcon.svg'
 import {getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import {db} from '../firebase.config'
 import { getDoc, doc, serverTimestamp } from 'firebase/firestore'
+import { toastifyError, toastifySuccess } from '../toastify'
+
+
 
 function SignUp() {
   
@@ -26,12 +29,14 @@ function SignUp() {
       [e.target.id]:e.target.value,
     }))
   }
+
+
+
   const onSubmitHandler=async(e)=>{
     e.preventDefault();
     try{
       const auth=getAuth();
       const userCred=await createUserWithEmailAndPassword(auth,email,password)
-      .then(console.log('User created!!!'));
       const user=userCred.user;
 
       // console.log(user);
@@ -44,9 +49,11 @@ function SignUp() {
       updateProfile(auth.currentUser,{
         displayName:name,
       })
-      navigate('/offers'); 
+      toastifySuccess('New User Created.')
+      navigate('/'); 
     }
     catch(e){
+      toastifyError("Problem creating new user!")
       console.log(e);
     }
   }

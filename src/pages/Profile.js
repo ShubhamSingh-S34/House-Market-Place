@@ -8,8 +8,10 @@ function Profile() {
   const [user,setUser]= useState(null);
   const auth=getAuth();
   useEffect(()=>{
+    console.log("Inside profile page!!!");
+    console.log(auth.currentUser);
     setUser(auth.currentUser);
-  })
+  },[user])
 
   return user? <h1>{user.displayName}</h1>:
   <div>

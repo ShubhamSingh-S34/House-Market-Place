@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import {ReactComponent as ArrowRightIcon} from '../assets/svg/keyboardArrowRightIcon.svg'
 import visibilityIcon from '../assets/svg/visibilityIcon.svg'
-
+import { toastifyError, toastifySuccess } from '../toastify'
 
 
 function SignIn() {
@@ -28,15 +28,17 @@ function SignIn() {
     e.preventDefault();
     const auth=getAuth();
     try{
-      const userCred=await signInWithEmailAndPassword(auth,formData.email,formData.password);
+      const userCred=await signInWithEmailAndPassword(auth,formData.email,formData.password)
       // console.log(userCred);
       const user=auth.currentUser;
       // console.log(user);
       if(user){
+        toastifySuccess('Succesfully Singed In.')
         navigate('/profile');
       }
     }
     catch(err){
+      toastifyError("Fraud!!!! Bad User Credentials !!!")
       console.error(err.message);
     }
   }
