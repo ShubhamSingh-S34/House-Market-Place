@@ -1,22 +1,91 @@
 import React, { useEffect, useState } from 'react'
-import { getAuth } from 'firebase/auth'
-import SignIn from './SignIn';
-import { Link } from 'react-router-dom';
-
-
+import { getAuth, updateProfile } from 'firebase/auth'
+import { db } from '../firebase.config';
+import { useNavigate, Link } from 'react-router-dom';
+import { doc, updateDoc } from 'firebase/firestore';
+import { toastifyError, toastifySuccess } from '../toastify';
 function Profile() {
-  const [user,setUser]= useState(null);
   const auth=getAuth();
-  useEffect(()=>{
-    console.log("Inside profile page!!!");
-    console.log(auth.currentUser);
-    setUser(auth.currentUser);
-  },[user])
+  const [changeDetails, setChangeDetails] =useState(false);
+  const [formData,setFormData]= useState({
+    name:auth.currentUser.displayName,
+    email:auth.currentUser.email,
+  });
 
-  return user? <h1>{user.displayName}</h1>:
-  <div>
-    <h1>Not Logged In</h1>
-    <Link to='/sign-in'>Sign in here</Link>
+  const {name,email}=formData;
+
+  const navigate=useNavigate()
+  const logout=()=>{
+    auth.signOut();
+    navigate('/');
+  }
+
+  const changeDetailsHandler=()=>{
+    if(changeDetails){
+      onSubmitHandler();
+    }
+    setChangeDetails((prevState)=>(!prevState))
+  }
+  const onSubmitHandler= async()=>{
+    try {
+      if(auth.currentUser.displayName!=name){
+        // update display name in authentication
+        updateProfile(auth.currentUser,{
+          displayName:name
+        })
+
+        // update in firestore
+        const userRef= doc(db, 'users', auth.currentUser.uid);
+        await updateDoc(userRef,{
+          name:name
+        })
+
+      }
+    } catch (error) {
+      console.log(error);
+      toastifyError("Could not update profile details")
+    }
+  }
+
+
+  const onChange=(e)=>{
+    setFormData((prevState)=>({
+      ...prevState,
+      [e.target.id]:e.target.value,
+    }))
+  }
+
+  return <div className='profile'>
+    <header className='profileHeader'>
+      <p className='pageHeader'>My Profile</p>
+      <button className='logOut' type='button' onClick={logout}>Logout</button>
+    </header>
+
+    <main>
+      <div className='profileDetailsHeader'>
+        <p className='profileDetailsText'> Personal Details </p>
+        <p className='changePersonalDetails' onClick={changeDetailsHandler} >
+          {changeDetails?'Done':'Edit'}
+        </p>
+      </div>
+      <div className='profileCard'>
+        <form>
+          <input type='text' id='name' 
+            className={!changeDetails?'profileName':'profileNameActive'} 
+            disabled={!changeDetails}
+            value={name}
+            onChange={onChange} 
+          />
+          <input type='text' id='email' 
+            className={!changeDetails?'profileName':'profileNameActive'} 
+            disabled={!changeDetails}
+            value={email}
+            onChange={onChange} 
+          />
+        </form>
+      </div>
+    </main>
+
   </div>
 }
 
