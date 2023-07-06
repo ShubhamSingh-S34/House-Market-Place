@@ -5,7 +5,7 @@ import {ReactComponent as ArrowRightIcon} from '../assets/svg/keyboardArrowRight
 import visibilityIcon from '../assets/svg/visibilityIcon.svg'
 import {getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import {db} from '../firebase.config'
-import { getDoc, doc, serverTimestamp } from 'firebase/firestore'
+import { getDoc, doc, serverTimestamp, setDoc } from 'firebase/firestore'
 import { toastifyError, toastifySuccess } from '../toastify'
 
 
@@ -42,15 +42,15 @@ function SignUp() {
       // console.log(user);
       const formDataCopy={...formData};
       // delete formDataCopy.password;
-      await getDoc(doc(db,'users',user.uid),formDataCopy)
+      await setDoc(doc(db,'users',user.uid),formDataCopy)
       .then(console.log("User added to the user database!!!"))
-      // .catch((err)=>{console.log('ERROR IN CREATING USER...', err)}); 
+      .catch((err)=>{console.log('ERROR IN CREATING USER...', err)}); 
 
-      updateProfile(auth.currentUser,{
+      await updateProfile(auth.currentUser,{
         displayName:name,
       })
       toastifySuccess('New User Created.')
-      navigate('/'); 
+      navigate('/profile'); 
     }
     catch(e){
       toastifyError("Problem creating new user!")
