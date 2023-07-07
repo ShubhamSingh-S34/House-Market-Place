@@ -14,6 +14,7 @@ function ForgetPassword() {
     e.preventDefault();  
     try{
       const auth=getAuth();
+      console.log(email);
       await sendPasswordResetEmail(auth,email)
       toastifySuccess('Email was sent')
     }
