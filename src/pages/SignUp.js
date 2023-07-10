@@ -109,7 +109,7 @@ function SignUp() {
 
       {/* google oAUTH vomponenet */}
       <OAuth />
-      <Link to='/sign-in' className='registerLink'>
+      <Link to='/sign-in' className='registerLinkSignUp'>
         Sign In Instead
       </Link>
 
