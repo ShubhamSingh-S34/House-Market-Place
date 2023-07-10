@@ -9,6 +9,7 @@ import SignUp from "./pages/SignUp.js"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; //toastify -css File
 import PrivateRoute from "./components/PrivateRoute.jsx";
+import Category from "./pages/Category.js";
 function App() {
   return (
    
@@ -19,6 +20,7 @@ function App() {
           <Route path="/" element={<Explore />} />
           <Route path="/forgetpassword" element={<ForgetPassword />} />
           <Route path="/offers" element={<Offers />} />
+          <Route path="/category/:categoryName" element={<Category />} />
           <Route path="/profile" element={<PrivateRoute />}>
             <Route path="/profile" element={<Profile />} />
           </Route>
