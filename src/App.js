@@ -6,10 +6,11 @@ import Offers from "./pages/Offers.js"
 import Profile from "./pages/Profile.js"
 import SignIn from "./pages/SignIn.js"
 import SignUp from "./pages/SignUp.js"
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; //toastify -css File
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import Category from "./pages/Category.js";
+import CreateListings from "./pages/CreateListings.js";
 function App() {
   return (
    
@@ -26,6 +27,7 @@ function App() {
           </Route>
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp/>} />
+          <Route path="/create-listing" element={<CreateListings/>} />
         </Routes>
         <ToastContainer />
         <Navbar />  
