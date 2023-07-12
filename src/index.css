@@ -807,7 +807,11 @@ button {
   border-radius: 1rem;
   margin-right: 1rem;
 }
-
+.formLatLng{
+  /* background-color: black; */
+  display: flex;
+  flex-direction: column;
+}
 .createListingButton {
   margin-top: 5rem;
 }
