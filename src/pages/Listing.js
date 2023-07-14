@@ -7,12 +7,22 @@ import { db } from '../firebase.config'
 import Spinner from '../components/Spinner'
 import shareIcon from '../assets/svg/shareIcon.svg'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import { layerGroup } from 'leaflet'
+import { Swiper, SwiperSlide } from 'swiper/react';
+// import Swiper core and required modules
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+// import SwiperCore from 'swiper'
+// SwiperCore.use([Navigation, Pagination, Scrollbar, A11y])
+
+// Import Swiper styles
+import 'swiper/css';
 
 function Listing() {
+
     const [listing, setListing] = useState(null)
     const [loading, setLoading] = useState(true)
     const [shareLinkCopied, setShareLinkCopied] = useState(false)
-  
+    const [images, setImages]=useState({});
     const navigate = useNavigate()
     const params = useParams()
     const auth = getAuth()
@@ -23,23 +33,54 @@ function Listing() {
         const docSnap = await getDoc(docRef)
   
         if (docSnap.exists()) {
-            console.log(docSnap.data());
-            setListing(docSnap.data())
-            setLoading(false)
+          setListing(docSnap.data());
+          console.log(listing);
+          setLoading(false)
         }
       }
-  
       fetchListing()
     }, [navigate, params.listingId])
-
 
     if(loading){
       return <Spinner />
     }
 
   return (
+    
     <main>
+      
+      
       {/* SLIDE SHOW */}
+      {/* {console.log(listing.imageUrls)} */}
+      <Swiper
+      spaceBetween={50}
+      slidesPerView={1}
+      onSlideChange={() => console.log('slide change')}
+      onSwiper={(swiper) => console.log(swiper)}
+      >
+        {listing.imageUrls.map((imgurl,index)=>{
+          return (
+            <SwiperSlide key={index}>
+            <div
+              style={{
+                background: `url(${imgurl}) center no-repeat`,
+                backgroundSize: 'cover',
+                width:'100%',
+                height:'550px'
+              }}
+              className='swiperSlideDiv'
+            ></div>
+          </SwiperSlide>
+          )
+        })}
+      </Swiper>
+
+
+
+
+
+
+
       <div className='shareIconDiv' onClick={()=>{
         // FUNCTION TO COPY LINK TO CLIPBOARD
         navigator.clipboard.writeText(window.location.href)
