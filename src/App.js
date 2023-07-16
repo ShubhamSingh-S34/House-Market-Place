@@ -15,11 +15,11 @@ import Listing from "./pages/Listing.js";
 import ContactPage from "./pages/ContactPage.js";
 function App() {
   return (
-   
-   <div>
+
+    <div>
       <Router>
         <Routes>
-        
+
           <Route path="/" element={<Explore />} />
           <Route path="/forgetpassword" element={<ForgetPassword />} />
           <Route path="/offers" element={<Offers />} />
@@ -29,15 +29,16 @@ function App() {
             <Route path="/profile" element={<Profile />} />
           </Route>
           <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/sign-up" element={<SignUp/>} />
-          <Route path="/create-listing" element={<CreateListings/>} />
-          <Route path="/contact/:landlordID" element={<ContactPage />} /> 
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/create-listing" element={<CreateListings />} />
+          <Route path="/contact/:landlordID" element={<ContactPage />} />
         </Routes>
         <ToastContainer />
-        <Navbar />  
+        <br /><br /><br /><br /><br />
+        <Navbar />
       </Router>
       <ToastContainer />
-   </div>
+    </div>
   );
 }
 
