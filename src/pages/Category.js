@@ -17,6 +17,7 @@ function Category() {
     useEffect(() => {
         const fetchListings = async () => {
             try {
+                console.log('Inside fetchListings in Category.js');
                 // listing reference
                 const listingsRef = collection(db, 'listings');
                 // generating query
@@ -43,8 +44,8 @@ function Category() {
                 console.log(listings)
             }
             catch (err) {
-                toastifyError("OOPS!!!");
-                console.log(err);
+                toastifyError('Oops!');
+                console.log('Inside fetchListings catch block ', err);
             }
         }
         fetchListings();
@@ -94,22 +95,24 @@ function Category() {
                 <p className='pageHeader'>
                     Places for {params.categoryName}
                 </p>
-                {loading ?
-                    <Spinner /> :
-                    listings && listings.length > 0 ?
+                {
+                    loading ?
+                        <Spinner /> :
+                        listings && listings.length > 0 ?
 
-                        (<>
-                            {console.log("Inside main", listings)}
-                            <main>
-                                <ul className='categoryListings'>
-                                    {listings.map((listing) => (
-                                        <ListingItem listing={listing.data} id={listing.id} />
-                                    ))}
-                                </ul>
-                            </main>
-                            {lastFetchedListing && (<p className='loadMore' onClick={onFetchMoreListings}> Load More </p>)}
-                        </>) :
-                        <p>No listsings for {params.categoryName}</p>}
+                            (<>
+                                {console.log("Inside main", listings[0].data)}
+                                <main>
+                                    <ul className='categoryListings'>
+                                        {listings.map((listing) => (
+                                            <ListingItem listing={listing.data} id={listing.id} />
+                                        ))}
+                                    </ul>
+                                </main>
+                                {lastFetchedListing && (<p className='loadMore' onClick={onFetchMoreListings}> Load More </p>)}
+                            </>) :
+                            <p>No listsings for {params.categoryName}</p>
+                }
             </header>
         </div>
     )

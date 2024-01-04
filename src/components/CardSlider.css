@@ -1,0 +1,33 @@
+.card-container {
+    display: flex;
+    justify-content: center;
+    /* background-color: aqua; */
+    padding-left: 28px;
+}
+
+.card {
+    width: 300px;
+    padding: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin: 0 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* background-color: red; */
+
+}
+
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+h3 {
+    margin-bottom: 8px;
+}
+
+p {
+    color: #555;
+}

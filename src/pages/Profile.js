@@ -30,18 +30,24 @@ function Profile() {
 
   useEffect(() => {
     const fetchUserListings = async () => {
-      const listingRef = collection(db, 'listings');
-      const q = query(listingRef, where("userRef", '==', auth.currentUser.uid), orderBy('timestamp', 'desc'));
-      const querySnap = await getDocs(q);
-      const listings = [];
-      querySnap.forEach((doc) => {
-        return (listings.push({
-          id: doc.id,
-          data: doc.data(),
-        }))
-      })
-      setListings(listings);
-      setLoading(false);
+      try {
+        console.log('Inside FetchUserListing Function ');
+        const listingRef = collection(db, 'listings');
+        const q = query(listingRef, where("userRef", '==', auth.currentUser.uid), orderBy('timestamp', 'desc'));
+        const querySnap = await getDocs(q);
+        const listings = [];
+        querySnap.forEach((doc) => {
+          return (listings.push({
+            id: doc.id,
+            data: doc.data(),
+          }))
+        })
+        setListings(listings);
+        setLoading(false);
+      } catch (error) {
+        console.log('Error inside fetchUserListing function !!! : ', error);
+      }
+
     }
     fetchUserListings();
   }, [])

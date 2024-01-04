@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { getAuth , onAuthStateChanged} from 'firebase/auth'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 
 
 // during initial loading auth.currentuser is null (from Profile.js) because it takes time for get auth to set the current user.
@@ -9,18 +9,18 @@ import { getAuth , onAuthStateChanged} from 'firebase/auth'
 
 
 export const useAuthStatus = () => {
-  
-    const [loggedIn, setLoggedIn] = useState(false);
-    const [loading, setLoading] =useState(true);
 
-    useEffect(()=>{
-        const auth=getAuth();
-        onAuthStateChanged(auth,(user)=>{
-            if(user){
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const auth = getAuth();
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
                 setLoggedIn(true);
             }
             setLoading(false);
-        } )
+        })
     })
-    return {loggedIn, loading};
+    return { loggedIn, loading };
 }
