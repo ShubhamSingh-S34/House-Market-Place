@@ -19,58 +19,58 @@ import 'swiper/css';
 
 function Listing() {
 
-    const [listing, setListing] = useState(null)
-    const [loading, setLoading] = useState(true)
-    const [shareLinkCopied, setShareLinkCopied] = useState(false)
-    const [images, setImages]=useState({});
-    const navigate = useNavigate()
-    const params = useParams()
-    const auth = getAuth()
-  
-    useEffect(() => {
-      const fetchListing = async () => {
-        const docRef = doc(db, 'listings', params.listingId)
-        const docSnap = await getDoc(docRef)
-  
-        if (docSnap.exists()) {
-          setListing(docSnap.data());
-          console.log(listing);
-          setLoading(false)
-        }
-      }
-      fetchListing()
-    }, [navigate, params.listingId])
+  const [listing, setListing] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [shareLinkCopied, setShareLinkCopied] = useState(false)
+  const [images, setImages] = useState({});
+  const navigate = useNavigate()
+  const params = useParams()
+  const auth = getAuth()
 
-    if(loading){
-      return <Spinner />
+  useEffect(() => {
+    const fetchListing = async () => {
+      const docRef = doc(db, 'listings', params.listingId)
+      const docSnap = await getDoc(docRef)
+
+      if (docSnap.exists()) {
+        setListing(docSnap.data());
+        // console.log(listing);
+        setLoading(false)
+      }
     }
+    fetchListing()
+  }, [navigate, params.listingId])
+
+  if (loading) {
+    return <Spinner />
+  }
 
   return (
-    
+
     <main>
-      
-      
+
+
       {/* SLIDE SHOW */}
       {/* {console.log(listing.imageUrls)} */}
       <Swiper
-      spaceBetween={50}
-      slidesPerView={1}
-      onSlideChange={() => console.log('slide change')}
-      onSwiper={(swiper) => console.log(swiper)}
+        spaceBetween={50}
+        slidesPerView={1}
+        onSlideChange={() => console.log('slide change')}
+        onSwiper={(swiper) => console.log(swiper)}
       >
-        {listing.imageUrls.map((imgurl,index)=>{
+        {listing.imageUrls.map((imgurl, index) => {
           return (
             <SwiperSlide key={index}>
-            <div
-              style={{
-                background: `url(${imgurl}) center no-repeat`,
-                backgroundSize: 'cover',
-                width:'100%',
-                height:'550px'
-              }}
-              className='swiperSlideDiv'
-            ></div>
-          </SwiperSlide>
+              <div
+                style={{
+                  background: `url(${imgurl}) center no-repeat`,
+                  backgroundSize: 'cover',
+                  width: '100%',
+                  height: '550px'
+                }}
+                className='swiperSlideDiv'
+              ></div>
+            </SwiperSlide>
           )
         })}
       </Swiper>
@@ -81,51 +81,52 @@ function Listing() {
 
 
 
-      <div className='shareIconDiv' onClick={()=>{
+      <div className='shareIconDiv' onClick={() => {
         // FUNCTION TO COPY LINK TO CLIPBOARD
         navigator.clipboard.writeText(window.location.href)
         setShareLinkCopied(true);
-        setTimeout(()=>{
+        setTimeout(() => {
           setShareLinkCopied(false);
-        },2000)  
+        }, 2000)
       }}>
-        <img src={shareIcon}  />
+        <img src={shareIcon} />
       </div>
       {shareLinkCopied && (<p className='linkCopied'>Link Copied</p>)}
       <div className='listingDetails'>
         <p className='listingName'>
-          {listing.name}- {listing.offer? listing.offerPrice:listing.regularPrice}
+          {listing.name}- {listing.offer ? listing.offerPrice : listing.regularPrice}
         </p>
         <p className='listingLocation'>{listing.location}</p>
-        <p className='listingType'>{listing.type==='rent'? "rent":"sale"}</p>
+        <p className='listingType'>{listing.type === 'rent' ? "rent" : "sale"}</p>
         {listing.offer && (
           <p className='discountPrice'>
-            {listing.regularPrice-listing.discountedPrice} discountedPrice
-            </p>
+            {listing.regularPrice - listing.discountedPrice} discountedPrice
+          </p>
         )}
 
 
-          <ul className='listingDetailsList'>
-            <li>
-              {listing.bedrooms>1?`${listing.bedrooms} Bedrroms`: '1 Bedroom'}
-            </li>
-            <li>
-              {listing.bathrooms>1?`${listing.bathrooms} Bathrooms`: '1 bathrooms'}
-            </li>
-            <li>
-              {listing.parking && 'Parking Spot'}
-            </li>
-            <li>
-              {listing.furnished && 'Furnished '}
-            </li>
-          </ul>
+        <ul className='listingDetailsList'>
+          <li>
+            {listing.bedrooms > 1 ? `${listing.bedrooms} Bedrroms` : '1 Bedroom'}
+          </li>
+          <li>
+            {listing.bathrooms > 1 ? `${listing.bathrooms} Bathrooms` : '1 bathrooms'}
+          </li>
+          <li>
+            {listing.parking && 'Parking Spot'}
+          </li>
+          <li>
+            {listing.furnished && 'Furnished '}
+          </li>
+        </ul>
 
-          <p className='listingLocationTitle'>Location</p>
-          {/* MAP */}
-          <div className='leafletContainer'>
+        <p className='listingLocationTitle'>Location</p>
+        {/* MAP */}
+        {/* {console.log('Latitude: ', listing.geoLocation.lat, ' Longitude: ', listing.geoLocation.lng)} */}
+        <div className='leafletContainer'>
           <MapContainer
             style={{ height: '100%', width: '100%' }}
-            center={[listing.geoLocation.lat, listing.geoLocation.lng]}
+            center={[listing.geoLocation.lng, listing.geoLocation.lat]}
             zoom={13}
             scrollWheelZoom={false}
           >
@@ -135,17 +136,17 @@ function Listing() {
             />
 
             <Marker
-              position={[listing.geoLocation.lat, listing.geoLocation.lng]}
+              position={[listing.geoLocation.lng, listing.geoLocation.lat]}
             >
               <Popup>{listing.location}</Popup>
             </Marker>
           </MapContainer>
         </div>
-          {auth.currentUser?.uid!==listing.userRef &&(
-            <Link to={`/contact/${listing.userRef}?listingName=${listing.name}`} className='primaryButton'>
-              Contact Landlord
-            </Link>
-          )}
+        {auth.currentUser?.uid !== listing.userRef && (
+          <Link to={`/contact/${listing.userRef}?listingName=${listing.name}`} className='primaryButton'>
+            Contact Landlord
+          </Link>
+        )}
       </div>
     </main>
   )
