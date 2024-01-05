@@ -25,13 +25,13 @@ This full-stack real estate web application allows users to create listings for 
 ## Screenshots
 
 ![Screenshot 1](/Screenshots/1.png)
-*Caption for Screenshot 1*
+*Explore Page*
 
 ![Screenshot 2](/Screenshots/2.png)
-*Caption for Screenshot 2*
+*Rent Category Page*
 
 ![Screenshot 3](/Screenshots/3.png)
-*Caption for Screenshot 2*
+*Profile Page*
 
 <!-- Add more screenshots and captions as needed -->
 
